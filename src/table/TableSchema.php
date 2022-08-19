@@ -9,7 +9,9 @@ class TableSchema
 {
     protected string $tableName;
     protected string $prefix = '';
+    /* @phpstan-ignore-next-line */
     protected array $columns = [];
+    /* @phpstan-ignore-next-line */
     protected array $pk = [];
 
     /**
@@ -88,7 +90,7 @@ class TableSchema
     }
 
     /**
-     * @return array
+     * @return ColumnSchema[]
      */
     public function getAllColumns(): array
     {
@@ -107,7 +109,7 @@ class TableSchema
     }
 
     /**
-     * @param array $pkColumns
+     * @param string[] $pkColumns
      * @return $this
      */
     public function withPrimaryKey(array $pkColumns): self
@@ -130,7 +132,7 @@ class TableSchema
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getPrimaryKey(): array
     {
@@ -148,8 +150,8 @@ class TableSchema
     }
 
     /**
-     * @param array $pkColumns
-     * @param array $columns
+     * @param string[] $pkColumns
+     * @param ColumnSchema[] $columns
      * @return void
      */
     protected function assertColumnsPkValid(array $pkColumns, array $columns): void

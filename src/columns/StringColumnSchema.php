@@ -109,9 +109,9 @@ class StringColumnSchema extends ColumnSchema
      */
     protected function assertCorrectness(?int $strLimit, ?string $default): void
     {
-        if(isset($defaultValue) && (isset($strLimit))) {
+        if(isset($default) && (isset($strLimit))) {
             Assert::true(
-                strlen($defaultValue) <= $this->stringLengthLimit,
+                strlen($default) <= $this->stringLengthLimit,
                 "Default value longer then able by string limit"
             );
         }

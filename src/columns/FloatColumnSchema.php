@@ -101,7 +101,7 @@ class FloatColumnSchema extends ColumnSchema
     }
 
     /**
-     * @return int|null
+     * @return float|null
      */
     public function getDefaultValue(): ?float
     {

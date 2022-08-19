@@ -6,8 +6,10 @@ use Webmozart\Assert\Assert;
 
 abstract class ColumnSchema
 {
+
     protected string $columnName;
     protected bool $nullable = true;
+    /* @phpstan-ignore-next-line */
     protected array $specs = [];
     protected bool $unique = false;
 
