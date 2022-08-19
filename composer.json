@@ -1,0 +1,40 @@
+{
+    "name": "mnemesong/table-schema",
+    "description": "Package contains table-schema and column-schema classes and builder.",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "phpstan/phpstan": "*",
+        "phpstan/phpstan-webmozart-assert": "*",
+        "phpstan/extension-installer": "*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mnemesong\\TableSchema\\": "src/",
+            "Mnemesong\\TableSchemaTestUnit\\": "test-unit/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Pantagruel74",
+            "email": "tostar74@mail.ru"
+        }
+    ],
+    "scripts": {
+        "test:unit": "phpunit test-unit",
+        "lint:src": "phpstan analyse src --level 9",
+        "lint:stubs": "phpstan analyse stubs --level 9",
+        "lint:unit": "phpstan analyse test-unit --level 9"
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4",
+        "webmozart/assert": "1.11.*"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
+    }
+}
