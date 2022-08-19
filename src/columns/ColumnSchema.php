@@ -6,26 +6,27 @@ use Webmozart\Assert\Assert;
 
 abstract class ColumnSchema
 {
-    protected string $name;
+    protected string $columnName;
     protected bool $nullable = true;
     protected array $specs = [];
+    protected bool $unique = false;
 
     /**
      * @param string $name
      */
     public function __construct(string $name)
     {
-        $this->setName($name);
+        $this->setColumnName($name);
     }
 
     /**
-     * @param string $name
+     * @param string $columnName
      * @return void
      */
-    protected function setName(string $name): void
+    protected function setColumnName(string $columnName): void
     {
-        Assert::true(strlen($name) > 0, 'Column Name string should be not empty');
-        $this->name = $name;
+        Assert::true(strlen($columnName) > 0, 'Column Name string should be not empty');
+        $this->columnName = $columnName;
     }
 
     /**
@@ -82,6 +83,58 @@ abstract class ColumnSchema
         $clone = clone $this;
         $clone->specs = [];
         return $clone;
+    }
+
+    /**
+     * @return $this
+     */
+    public function asUnique(): self
+    {
+        $clone = clone $this;
+        $clone->unique = true;
+        return $clone;
+    }
+
+    /**
+     * @return $this
+     */
+    public function asNotUnique(): self
+    {
+        $clone = clone $this;
+        $clone->unique = false;
+        return $clone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getColumnName(): string
+    {
+        return $this->columnName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNullable(): bool
+    {
+        return $this->nullable;
+    }
+
+    /**
+     * @return scalar[]
+     */
+    public function getSpecs(): array
+    {
+        return $this->specs;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUnique(): bool
+    {
+        return $this->unique;
     }
 
     /**
@@ -149,16 +202,15 @@ abstract class ColumnSchema
      */
     public function convertToIntegerColumn(): IntegerColumnSchema
     {
-        return new IntegerColumnSchema($this->name);
+        return new IntegerColumnSchema($this->columnName);
     }
-
 
     /**
      * @return FloatColumnSchema
      */
     public function convertToFloatColumn(): FloatColumnSchema
     {
-        return new FloatColumnSchema($this->name);
+        return new FloatColumnSchema($this->columnName);
     }
 
     /**
@@ -166,7 +218,7 @@ abstract class ColumnSchema
      */
     public function convertToStringColumn(): StringColumnSchema
     {
-        return new StringColumnSchema($this->name);
+        return new StringColumnSchema($this->columnName);
     }
 
     /**
@@ -174,6 +226,6 @@ abstract class ColumnSchema
      */
     public function convertToBoolColumn(): BoolColumnSchema
     {
-        return new BoolColumnSchema($this->name);
+        return new BoolColumnSchema($this->columnName);
     }
 }

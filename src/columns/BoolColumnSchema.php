@@ -28,6 +28,14 @@ class BoolColumnSchema extends ColumnSchema
     }
 
     /**
+     * @return bool|null
+     */
+    public function getDefault(): ?bool
+    {
+        return $this->default;
+    }
+
+    /**
      * @return bool
      */
     public function isIntegerColumn(): bool

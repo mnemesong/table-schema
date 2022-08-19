@@ -55,6 +55,22 @@ class StringColumnSchema extends ColumnSchema
     }
 
     /**
+     * @return int|null
+     */
+    public function getStringLengthLimit(): ?int
+    {
+        return $this->stringLengthLimit;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDefaultValue(): ?string
+    {
+        return $this->defaultValue;
+    }
+
+    /**
      * @return bool
      */
     public function isIntegerColumn(): bool

@@ -77,6 +77,38 @@ class FloatColumnSchema extends ColumnSchema
     }
 
     /**
+     * @return float|null
+     */
+    public function getMinValue(): ?float
+    {
+        return $this->minValue;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getMaxValue(): ?float
+    {
+        return $this->maxValue;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAccuracy(): float
+    {
+        return $this->accuracy;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDefault(): ?int
+    {
+        return $this->default;
+    }
+
+    /**
      * @return bool
      */
     public function isIntegerColumn(): bool

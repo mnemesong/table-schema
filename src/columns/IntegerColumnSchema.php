@@ -63,6 +63,29 @@ class IntegerColumnSchema extends ColumnSchema
         return $clone;
     }
 
+    /**
+     * @return int|null
+     */
+    public function getMaxValue(): ?int
+    {
+        return $this->maxValue;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMinValue(): ?int
+    {
+        return $this->minValue;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDefault(): ?int
+    {
+        return $this->default;
+    }
 
     /**
      * @return bool
