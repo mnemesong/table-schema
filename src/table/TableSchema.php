@@ -40,16 +40,6 @@ class TableSchema
     }
 
     /**
-     * @return $this
-     */
-    public function withoutPrefix(): self
-    {
-        $clone = clone $this;
-        $clone->prefix = '';
-        return $clone;
-    }
-
-    /**
      * @return string
      */
     public function getPrefix(): string
@@ -64,7 +54,8 @@ class TableSchema
     public function withColumn(ColumnSchema $columnSchema): self
     {
         $clone = clone $this;
-        $clone->columns = array_filter($clone->columns, fn(ColumnSchema $c) => ($c !== $columnSchema->getColumnName()));
+        $clone->columns = array_filter($clone->columns, fn(ColumnSchema $c)
+            => ($c->getColumnName() !== $columnSchema->getColumnName()));
         $clone->columns[] = $columnSchema;
         return $clone;
     }
@@ -75,8 +66,11 @@ class TableSchema
      */
     public function withoutColumn(string $columnName): self
     {
+        $newColumns = array_filter($this->columns, fn(ColumnSchema $c) => ($c->getColumnName() !== $columnName));
+        $newColumns = array_values($newColumns);
+        $this->assertColumnsPkValid($this->pk, $newColumns);
         $clone = clone $this;
-        $clone->columns = array_filter($clone->columns, fn(ColumnSchema $c) => ($c !== $columnName));
+        $clone->columns = $newColumns;
         return $clone;
     }
 
@@ -106,6 +100,7 @@ class TableSchema
      */
     public function withClearColumns(): self
     {
+        $this->assertColumnsPkValid($this->pk, []);
         $clone = clone $this;
         $clone->columns = [];
         return $clone;
@@ -118,6 +113,7 @@ class TableSchema
     public function withPrimaryKey(array $pkColumns): self
     {
         Assert::allStringNotEmpty($pkColumns, "Set Primary keys parameter should be array of not empty strings");
+        $this->assertColumnsPkValid($pkColumns, $this->columns);
         $clone = clone $this;
         $clone->pk = $pkColumns;
         return $clone;
@@ -149,5 +145,16 @@ class TableSchema
     {
         Assert::stringNotEmpty($name, "Table name should be not empty string");
         $this->tableName = $name;
+    }
+
+    /**
+     * @param array $pkColumns
+     * @param array $columns
+     * @return void
+     */
+    protected function assertColumnsPkValid(array $pkColumns, array $columns): void
+    {
+        $columnNames = array_map(fn(ColumnSchema $c) => ($c->getColumnName()), $columns);
+        Assert::isEmpty(array_diff($pkColumns, $columnNames), "Try to set Primary Key to not exists value");
     }
 }
