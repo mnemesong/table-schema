@@ -60,7 +60,7 @@ class FloatColumnSchema extends ColumnSchema
      */
     public function withDefaultValue(?float $default): self
     {
-        $this->assertValuesCorrect($this->minValue, $this->maxValue, $this->default);
+        $this->assertValuesCorrect($this->minValue, $this->maxValue, $default);
         $clone = clone $this;
         $clone->default = $default;
         return $clone;
@@ -149,9 +149,9 @@ class FloatColumnSchema extends ColumnSchema
     protected function assertValuesCorrect(?float $minValue, ?float $maxValue, ?float $default): void
     {
         if(isset($default)) {
-            Assert::true(isset($minValue) || ($default >= $minValue), "Try to set default "
+            Assert::true(!isset($minValue) || ($default >= $minValue), "Try to set default "
                 . 'value lesser then minimal allowed ' . $minValue);
-            Assert::true(isset($minValue) || ($default >= $minValue), "Try to set default "
+            Assert::true(!isset($maxValue) || ($default <= $maxValue), "Try to set default "
                 . 'value more then maximal allowed ' . $maxValue);
         }
     }

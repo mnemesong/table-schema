@@ -134,4 +134,37 @@ class FloatColumnSchemaTest extends TestCase
         $this->assertEquals(null, $col3->getDefaultValue());
         $this->assertEquals(0.11, $col2->getDefaultValue());
     }
+
+    /**
+     * @return void
+     */
+    public function testDefaultException1(): void
+    {
+        $col = new FloatColumnSchema('metric');
+        $col = $col->withValueLimits(1, 10);
+        $this->expectException(\InvalidArgumentException::class);
+        $col = $col->withDefaultValue(0.5);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefaultException2(): void
+    {
+        $col = new FloatColumnSchema('metric');
+        $col = $col->withValueLimits(1, 10);
+        $this->expectException(\InvalidArgumentException::class);
+        $col = $col->withDefaultValue(10.3);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefaultException3(): void
+    {
+        $col = new FloatColumnSchema('metric');
+        $col = $col->withDefaultValue(10.3);
+        $this->expectException(\InvalidArgumentException::class);
+        $col = $col->withValueLimits(1, 10);
+    }
 }

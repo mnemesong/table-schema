@@ -120,4 +120,37 @@ class IntegerColumnSchemaTest extends TestCase
         $this->assertEquals(null, $col3->getDefaultValue());
         $this->assertEquals(12, $col2->getDefaultValue());
     }
+
+    /**
+     * @return void
+     */
+    public function testDefaultException1(): void
+    {
+        $col = new IntegerColumnSchema('age');
+        $col = $col->withValueLimits(1, 10);
+        $this->expectException(\InvalidArgumentException::class);
+        $col = $col->withDefaultValue(0);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefaultException2(): void
+    {
+        $col = new IntegerColumnSchema('age');
+        $col = $col->withValueLimits(1, 10);
+        $this->expectException(\InvalidArgumentException::class);
+        $col = $col->withDefaultValue(11);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefaultException3(): void
+    {
+        $col = new IntegerColumnSchema('age');
+        $col = $col->withDefaultValue(11);
+        $this->expectException(\InvalidArgumentException::class);
+        $col = $col->withValueLimits(1, 10);
+    }
 }
