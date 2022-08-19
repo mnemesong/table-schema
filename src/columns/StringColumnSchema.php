@@ -15,7 +15,7 @@ class StringColumnSchema extends ColumnSchema
      */
     public function withStringLengthLimit(?int $limit): self
     {
-        Assert::true(isset($limit) || ($limit >= 0), "String length limit should be equals or more then 0");
+        Assert::true(!isset($limit) || ($limit >= 0), "String length limit should be equals or more then 0");
         $this->assertCorrectness($limit, $this->defaultValue);
         $clone = clone $this;
         $clone->stringLengthLimit = $limit;

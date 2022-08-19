@@ -30,7 +30,7 @@ class BoolColumnSchema extends ColumnSchema
     /**
      * @return bool|null
      */
-    public function getDefault(): ?bool
+    public function getDefaultValue(): ?bool
     {
         return $this->default;
     }

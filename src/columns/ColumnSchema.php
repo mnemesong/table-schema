@@ -71,7 +71,7 @@ abstract class ColumnSchema
     {
         Assert::keyExists($this->specs, $key, "Specification key " . $key . " is not exist");
         $clone = clone $this;
-        $clone->specs = array_filter($clone->specs, fn(string $specKey) => ($specKey === $key), ARRAY_FILTER_USE_KEY);
+        $clone->specs = array_filter($clone->specs, fn(string $specKey) => ($specKey !== $key), ARRAY_FILTER_USE_KEY);
         return $clone;
     }
 
@@ -195,37 +195,5 @@ abstract class ColumnSchema
         Assert::isAOf($this, BoolColumnSchema::class, 'Try to cast not bool column schema as bool');
         /* @var BoolColumnSchema $this */
         return $this;
-    }
-
-    /**
-     * @return IntegerColumnSchema
-     */
-    public function convertToIntegerColumn(): IntegerColumnSchema
-    {
-        return new IntegerColumnSchema($this->columnName);
-    }
-
-    /**
-     * @return FloatColumnSchema
-     */
-    public function convertToFloatColumn(): FloatColumnSchema
-    {
-        return new FloatColumnSchema($this->columnName);
-    }
-
-    /**
-     * @return StringColumnSchema
-     */
-    public function convertToStringColumn(): StringColumnSchema
-    {
-        return new StringColumnSchema($this->columnName);
-    }
-
-    /**
-     * @return BoolColumnSchema
-     */
-    public function convertToBoolColumn(): BoolColumnSchema
-    {
-        return new BoolColumnSchema($this->columnName);
     }
 }

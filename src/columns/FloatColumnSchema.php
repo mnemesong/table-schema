@@ -9,7 +9,7 @@ class FloatColumnSchema extends ColumnSchema
     protected ?float $minValue = null;
     protected ?float $maxValue = null;
     protected float $accuracy = 0.0001;
-    protected ?int $default = null;
+    protected ?float $default = null;
 
     /**
      * @param float|null $minValue
@@ -103,7 +103,7 @@ class FloatColumnSchema extends ColumnSchema
     /**
      * @return int|null
      */
-    public function getDefault(): ?int
+    public function getDefaultValue(): ?float
     {
         return $this->default;
     }

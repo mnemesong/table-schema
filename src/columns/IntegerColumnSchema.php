@@ -82,7 +82,7 @@ class IntegerColumnSchema extends ColumnSchema
     /**
      * @return int|null
      */
-    public function getDefault(): ?int
+    public function getDefaultValue(): ?int
     {
         return $this->default;
     }

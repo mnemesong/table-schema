@@ -12,7 +12,9 @@
     "autoload": {
         "psr-4": {
             "Mnemesong\\TableSchema\\": "src/",
-            "Mnemesong\\TableSchemaTestUnit\\": "test-unit/"
+            "Mnemesong\\TableSchemaTestUnit\\": "test-unit/",
+            "Mnemesong\\TableSchemaTestHelpers\\": "test-helpers/",
+            "Mnemesong\\TableSchemaStubs\\": "stubs/"
         }
     },
     "authors": [
@@ -25,7 +27,8 @@
         "test:unit": "phpunit test-unit",
         "lint:src": "phpstan analyse src --level 9",
         "lint:stubs": "phpstan analyse stubs --level 9",
-        "lint:unit": "phpstan analyse test-unit --level 9"
+        "lint:unit": "phpstan analyse test-unit --level 9",
+        "lint:helpers": "phpstan analyse test-helpers --level 9"
     },
     "minimum-stability": "stable",
     "require": {
