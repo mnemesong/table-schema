@@ -8,6 +8,7 @@ abstract class ColumnSchema
 {
     protected string $name;
     protected bool $nullable = true;
+    protected array $specs = [];
 
     /**
      * @param string $name
@@ -44,6 +45,42 @@ abstract class ColumnSchema
     {
         $clone = clone $this;
         $clone->nullable = false;
+        return $clone;
+    }
+
+    /**
+     * @param string $key
+     * @param scalar|null $value
+     * @return $this
+     */
+    public function withAddSpec(string $key, $value = null): self
+    {
+        Assert::true(strlen($key) > 0, 'String length of column specification key should be more then 0');
+        Assert::nullOrScalar($value, "Column specification value should be null or scalar");
+        $clone = clone $this;
+        $clone->specs[$key] = $value;
+        return $clone;
+    }
+
+    /**
+     * @param string $key
+     * @return $this
+     */
+    public function withRemovedSpec(string $key): self
+    {
+        Assert::keyExists($this->specs, $key, "Specification key " . $key . " is not exist");
+        $clone = clone $this;
+        $clone->specs = array_filter($clone->specs, fn(string $specKey) => ($specKey === $key), ARRAY_FILTER_USE_KEY);
+        return $clone;
+    }
+
+    /**
+     * @return $this
+     */
+    public function withClearSpecs(): self
+    {
+        $clone = clone $this;
+        $clone->specs = [];
         return $clone;
     }
 
