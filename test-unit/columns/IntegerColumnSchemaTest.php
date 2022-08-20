@@ -2,9 +2,9 @@
 
 namespace Mnemesong\TableSchemaTestUnit\columns;
 
-use Mnemesong\TableSchema\columns\AbstractColumnSchema;
-use Mnemesong\TableSchema\columns\FloatAbstractColumnSchema;
-use Mnemesong\TableSchema\columns\IntegerAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\ColumnSchema;
+use Mnemesong\TableSchema\columns\FloatColumnSchema;
+use Mnemesong\TableSchema\columns\IntegerColumnSchema;
 use Mnemesong\TableSchemaTestHelpers\ColumnSchemaTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -22,11 +22,11 @@ class IntegerColumnSchemaTest extends TestCase
 
     /**
      * @param string $name
-     * @return AbstractColumnSchema
+     * @return ColumnSchema
      */
-    protected function getInitializedColumnSchema(string $name): AbstractColumnSchema
+    protected function getInitializedColumnSchema(string $name): ColumnSchema
     {
-        return new IntegerAbstractColumnSchema($name);
+        return new IntegerColumnSchema($name);
     }
 
     /**
@@ -34,7 +34,7 @@ class IntegerColumnSchemaTest extends TestCase
      */
     public function testValueLimits(): void
     {
-        $col1 = new IntegerAbstractColumnSchema('age');
+        $col1 = new IntegerColumnSchema('age');
         $this->assertEquals(null, $col1->getMaxValue());
         $this->assertEquals(null, $col1->getMinValue());
 
@@ -62,7 +62,7 @@ class IntegerColumnSchemaTest extends TestCase
      */
     public function testDefaultValue(): void
     {
-        $col1 = new IntegerAbstractColumnSchema('age');
+        $col1 = new IntegerColumnSchema('age');
         $this->assertEquals(null, $col1->getDefaultValue());
 
         $col2 = $col1->withDefaultValue(12);
@@ -79,7 +79,7 @@ class IntegerColumnSchemaTest extends TestCase
      */
     public function testDefaultException1(): void
     {
-        $col = new IntegerAbstractColumnSchema('age');
+        $col = new IntegerColumnSchema('age');
         $col = $col->withValueLimits(1, 10);
         $this->expectException(\InvalidArgumentException::class);
         $col = $col->withDefaultValue(0);
@@ -90,7 +90,7 @@ class IntegerColumnSchemaTest extends TestCase
      */
     public function testDefaultException2(): void
     {
-        $col = new IntegerAbstractColumnSchema('age');
+        $col = new IntegerColumnSchema('age');
         $col = $col->withValueLimits(1, 10);
         $this->expectException(\InvalidArgumentException::class);
         $col = $col->withDefaultValue(11);
@@ -101,7 +101,7 @@ class IntegerColumnSchemaTest extends TestCase
      */
     public function testDefaultException3(): void
     {
-        $col = new IntegerAbstractColumnSchema('age');
+        $col = new IntegerColumnSchema('age');
         $col = $col->withDefaultValue(11);
         $this->expectException(\InvalidArgumentException::class);
         $col = $col->withValueLimits(1, 10);
@@ -113,8 +113,8 @@ class IntegerColumnSchemaTest extends TestCase
     public function testTryToCast(): void
     {
         $col = $this->getInitializedColumnSchema('employeesNum');
-        $col = IntegerAbstractColumnSchema::tryToCastFrom($col);
-        $this->assertTrue(is_a($col, IntegerAbstractColumnSchema::class));
+        $col = IntegerColumnSchema::tryToCastFrom($col);
+        $this->assertTrue(is_a($col, IntegerColumnSchema::class));
     }
 
     /**
@@ -122,9 +122,9 @@ class IntegerColumnSchemaTest extends TestCase
      */
     public function testTryToCastException(): void
     {
-        $col = new FloatAbstractColumnSchema('distance');
+        $col = new FloatColumnSchema('distance');
         $this->expectException(\InvalidArgumentException::class);
-        $col = IntegerAbstractColumnSchema::tryToCastFrom($col);
+        $col = IntegerColumnSchema::tryToCastFrom($col);
     }
 
     /**

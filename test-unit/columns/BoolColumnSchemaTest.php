@@ -2,10 +2,10 @@
 
 namespace Mnemesong\TableSchemaTestUnit\columns;
 
-use Mnemesong\TableSchema\columns\BoolAbstractColumnSchema;
-use Mnemesong\TableSchema\columns\AbstractColumnSchema;
-use Mnemesong\TableSchema\columns\StringAbstractColumnSchema;
-use Mnemesong\TableSchemaStubs\AbstractColumnSchemaStub;
+use Mnemesong\TableSchema\columns\BoolColumnSchema;
+use Mnemesong\TableSchema\columns\ColumnSchema;
+use Mnemesong\TableSchema\columns\StringColumnSchema;
+use Mnemesong\TableSchemaStubs\ColumnSchemaStub;
 use Mnemesong\TableSchemaTestHelpers\ColumnSchemaTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -23,11 +23,11 @@ class BoolColumnSchemaTest extends TestCase
 
     /**
      * @param string $name
-     * @return AbstractColumnSchema
+     * @return ColumnSchema
      */
-    protected function getInitializedColumnSchema(string $name): AbstractColumnSchema
+    protected function getInitializedColumnSchema(string $name): ColumnSchema
     {
-        return new BoolAbstractColumnSchema($name);
+        return new BoolColumnSchema($name);
     }
 
     /**
@@ -35,7 +35,7 @@ class BoolColumnSchemaTest extends TestCase
      */
     public function testDefault(): void
     {
-        $col1 = new BoolAbstractColumnSchema('updated');
+        $col1 = new BoolColumnSchema('updated');
         $this->assertEquals(null, $col1->getDefaultValue());
 
         $col2 = $col1->withDefaultValue(true);
@@ -53,8 +53,8 @@ class BoolColumnSchemaTest extends TestCase
     public function testTryToCast(): void
     {
         $col = $this->getInitializedColumnSchema('column');
-        $col = BoolAbstractColumnSchema::tryToCastFrom($col);
-        $this->assertTrue(is_a($col, BoolAbstractColumnSchema::class));
+        $col = BoolColumnSchema::tryToCastFrom($col);
+        $this->assertTrue(is_a($col, BoolColumnSchema::class));
     }
 
     /**
@@ -62,9 +62,9 @@ class BoolColumnSchemaTest extends TestCase
      */
     public function testTryToCastException(): void
     {
-        $col = new StringAbstractColumnSchema('name');
+        $col = new StringColumnSchema('name');
         $this->expectException(\InvalidArgumentException::class);
-        $col = BoolAbstractColumnSchema::tryToCastFrom($col);
+        $col = BoolColumnSchema::tryToCastFrom($col);
     }
 
     /**

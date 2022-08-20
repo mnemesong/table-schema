@@ -2,9 +2,9 @@
 
 namespace Mnemesong\TableSchemaTestUnit\table;
 
-use Mnemesong\TableSchema\columns\BoolAbstractColumnSchema;
-use Mnemesong\TableSchema\columns\IntegerAbstractColumnSchema;
-use Mnemesong\TableSchema\columns\StringAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\BoolColumnSchema;
+use Mnemesong\TableSchema\columns\IntegerColumnSchema;
+use Mnemesong\TableSchema\columns\StringColumnSchema;
 use Mnemesong\TableSchema\table\TableSchema;
 use PHPUnit\Framework\TestCase;
 
@@ -49,44 +49,44 @@ class TableSchemaTest extends TestCase
         $t1 = new TableSchema('users');
         $this->assertEquals([], $t1->getAllColumns());
 
-        $t2 = $t1->withColumn(new BoolAbstractColumnSchema('active'));
+        $t2 = $t1->withColumn(new BoolColumnSchema('active'));
         $this->assertEquals([], $t1->getAllColumns());
-        $this->assertEquals([new BoolAbstractColumnSchema('active')], $t2->getAllColumns());
+        $this->assertEquals([new BoolColumnSchema('active')], $t2->getAllColumns());
 
-        $t3 = $t2->withColumn((new IntegerAbstractColumnSchema('age'))->withNullDisabled());
+        $t3 = $t2->withColumn((new IntegerColumnSchema('age'))->withNullDisabled());
         $this->assertEquals(
-            [new BoolAbstractColumnSchema('active'), (new IntegerAbstractColumnSchema('age'))->withNullDisabled()],
+            [new BoolColumnSchema('active'), (new IntegerColumnSchema('age'))->withNullDisabled()],
             $t3->getAllColumns()
         );
-        $this->assertEquals([new BoolAbstractColumnSchema('active')], $t2->getAllColumns());
+        $this->assertEquals([new BoolColumnSchema('active')], $t2->getAllColumns());
 
         $t4 = $t3->withoutColumn('active');
         $this->assertEquals(
-            [new BoolAbstractColumnSchema('active'), (new IntegerAbstractColumnSchema('age'))->withNullDisabled()],
+            [new BoolColumnSchema('active'), (new IntegerColumnSchema('age'))->withNullDisabled()],
             $t3->getAllColumns()
         );
         $this->assertEquals(
-            [(new IntegerAbstractColumnSchema('age'))->withNullDisabled()],
+            [(new IntegerColumnSchema('age'))->withNullDisabled()],
             $t4->getAllColumns()
         );
 
-        $this->assertEquals(new BoolAbstractColumnSchema('active'), $t3->getColumn('active'));
+        $this->assertEquals(new BoolColumnSchema('active'), $t3->getColumn('active'));
 
         $t5 = $t3->withClearColumns();
         $this->assertEquals(
-            [new BoolAbstractColumnSchema('active'), (new IntegerAbstractColumnSchema('age'))->withNullDisabled()],
+            [new BoolColumnSchema('active'), (new IntegerColumnSchema('age'))->withNullDisabled()],
             $t3->getAllColumns()
         );
         $this->assertEquals([], $t5->getAllColumns());
 
-        $t6 = $t3->withColumn((new IntegerAbstractColumnSchema('age'))->withAddSpec('mysql:json')->withValueLimits(0, 256));
+        $t6 = $t3->withColumn((new IntegerColumnSchema('age'))->withAddSpec('mysql:json')->withValueLimits(0, 256));
         $this->assertEquals(
-            [new BoolAbstractColumnSchema('active'), (new IntegerAbstractColumnSchema('age'))->withNullDisabled()],
+            [new BoolColumnSchema('active'), (new IntegerColumnSchema('age'))->withNullDisabled()],
             $t3->getAllColumns()
         );
         $this->assertEquals([
-                new BoolAbstractColumnSchema('active'),
-                (new IntegerAbstractColumnSchema('age'))->withAddSpec('mysql:json')->withValueLimits(0, 256)
+                new BoolColumnSchema('active'),
+                (new IntegerColumnSchema('age'))->withAddSpec('mysql:json')->withValueLimits(0, 256)
             ], $t6->getAllColumns());
     }
 
@@ -96,8 +96,8 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeys(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerAbstractColumnSchema('id'))
-            ->withColumn(new StringAbstractColumnSchema('account'));
+            ->withColumn(new IntegerColumnSchema('id'))
+            ->withColumn(new StringColumnSchema('account'));
         $this->assertEquals([], $t1->getPrimaryKey());
 
         $t2 = $t1->withPrimaryKey(['id']);
@@ -119,7 +119,7 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeyToColumnsInvalidStateException1(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerAbstractColumnSchema('id'));
+            ->withColumn(new IntegerColumnSchema('id'));
         $this->expectException(\InvalidArgumentException::class);
         $t1 = $t1->withPrimaryKey(['account']);
     }
@@ -130,7 +130,7 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeyToColumnsInvalidStateException2(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerAbstractColumnSchema('id'));
+            ->withColumn(new IntegerColumnSchema('id'));
         $this->expectException(\InvalidArgumentException::class);
         $t1 = $t1->withPrimaryKey(['id', 'users']);
     }
@@ -141,7 +141,7 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeyToColumnsInvalidStateException3(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerAbstractColumnSchema('id'));
+            ->withColumn(new IntegerColumnSchema('id'));
         $t1 = $t1->withPrimaryKey(['id']);
         $this->expectException(\InvalidArgumentException::class);
         $t1 = $t1->withoutColumn('id');
@@ -153,7 +153,7 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeyToColumnsInvalidStateException4(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerAbstractColumnSchema('id'));
+            ->withColumn(new IntegerColumnSchema('id'));
         $t1 = $t1->withPrimaryKey(['id']);
         $this->expectException(\InvalidArgumentException::class);
         $t1 = $t1->withClearColumns();

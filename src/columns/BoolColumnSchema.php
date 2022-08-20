@@ -4,7 +4,7 @@ namespace Mnemesong\TableSchema\columns;
 
 use Webmozart\Assert\Assert;
 
-final class BoolAbstractColumnSchema extends AbstractColumnSchema
+final class BoolColumnSchema extends ColumnSchema
 {
     protected ?bool $default = null;
 
@@ -46,13 +46,13 @@ final class BoolAbstractColumnSchema extends AbstractColumnSchema
     }
 
     /**
-     * @param AbstractColumnSchema $schema
-     * @return BoolAbstractColumnSchema
+     * @param ColumnSchema $schema
+     * @return BoolColumnSchema
      */
-    static public function tryToCastFrom(AbstractColumnSchema $schema): BoolAbstractColumnSchema
+    static public function tryToCastFrom(ColumnSchema $schema): BoolColumnSchema
     {
-        Assert::isAOf($schema, BoolAbstractColumnSchema::class);
-        /* @var BoolAbstractColumnSchema $schema */
+        Assert::isAOf($schema, BoolColumnSchema::class);
+        /* @var BoolColumnSchema $schema */
         return $schema;
     }
 }
