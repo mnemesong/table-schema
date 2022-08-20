@@ -4,7 +4,7 @@ namespace Mnemesong\TableSchema\columns;
 
 use Webmozart\Assert\Assert;
 
-class StringColumnSchema extends ColumnSchema
+final class StringColumnSchema extends ColumnSchema
 {
     protected ?int $stringLengthLimit = null;
     protected ?string $defaultValue = null;
@@ -71,35 +71,11 @@ class StringColumnSchema extends ColumnSchema
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isIntegerColumn(): bool
+    public function getType(): string
     {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isStringColumn(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBoolColumn(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFloatColumn(): bool
-    {
-        return false;
+        return 'string';
     }
 
     /**
@@ -115,5 +91,16 @@ class StringColumnSchema extends ColumnSchema
                 "Default value longer then able by string limit"
             );
         }
+    }
+
+    /**
+     * @param ColumnSchema $schema
+     * @return StringColumnSchema
+     */
+    static public function tryToCastFrom(ColumnSchema $schema): StringColumnSchema
+    {
+        Assert::isAOf($schema, StringColumnSchema::class);
+        /* @var StringColumnSchema $schema */
+        return $schema;
     }
 }

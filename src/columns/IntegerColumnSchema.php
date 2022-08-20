@@ -4,7 +4,7 @@ namespace Mnemesong\TableSchema\columns;
 
 use Webmozart\Assert\Assert;
 
-class IntegerColumnSchema extends ColumnSchema
+final class IntegerColumnSchema extends ColumnSchema
 {
     protected ?int $maxValue = null;
     protected ?int $minValue = null;
@@ -88,35 +88,11 @@ class IntegerColumnSchema extends ColumnSchema
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isIntegerColumn(): bool
+    public function getType(): string
     {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isStringColumn(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBoolColumn(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFloatColumn(): bool
-    {
-        return false;
+        return 'int';
     }
 
     /**
@@ -133,5 +109,16 @@ class IntegerColumnSchema extends ColumnSchema
             Assert::true(!isset($maxValue) || ($default <= $maxValue), "Try to set default "
                 . 'value more then maximal allowed ' . $maxValue);
         }
+    }
+
+    /**
+     * @param ColumnSchema $schema
+     * @return IntegerColumnSchema
+     */
+    static public function tryToCastFrom(ColumnSchema $schema): IntegerColumnSchema
+    {
+        Assert::isAOf($schema, IntegerColumnSchema::class);
+        /* @var IntegerColumnSchema $schema */
+        return $schema;
     }
 }

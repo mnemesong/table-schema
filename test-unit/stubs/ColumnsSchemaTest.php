@@ -2,6 +2,7 @@
 
 namespace Mnemesong\TableSchemaTestUnit\stubs;
 
+use Mnemesong\TableSchema\columns\BoolColumnSchema;
 use Mnemesong\TableSchema\columns\ColumnSchema;
 use Mnemesong\TableSchemaStubs\ColumnSchemaStub;
 use Mnemesong\TableSchemaTestHelpers\ColumnSchemaTestTrait;
@@ -31,48 +32,29 @@ class ColumnsSchemaTest extends TestCase
     /**
      * @return void
      */
-    public function testTypeChecks(): void
+    public function testTryToCast(): void
     {
-        $schema1 = $this->getInitializedColumnSchema('age');
-        $this->assertEquals(false, $schema1->isBoolColumn());
-        $this->assertEquals(false, $schema1->isIntegerColumn());
-        $this->assertEquals(false, $schema1->isFloatColumn());
-        $this->assertEquals(false, $schema1->isStringColumn());
+        $col = $this->getInitializedColumnSchema('someCol');
+        $col = ColumnSchemaStub::tryToCastFrom($col);
+        $this->assertEquals(ColumnSchemaStub::class, get_class($col));
     }
 
     /**
      * @return void
      */
-    public function testCastToBool(): void
+    public function testTryToCastException(): void
     {
+        $col = new BoolColumnSchema('active');
         $this->expectException(\InvalidArgumentException::class);
-        $this->getInitializedColumnSchema('age')->castToBoolColumn();
+        $col = ColumnSchemaStub::tryToCastFrom($col);
     }
 
     /**
      * @return void
      */
-    public function testCastToInteger(): void
+    public function testGetType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->getInitializedColumnSchema('age')->castToIntegerColumn();
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToString(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->getInitializedColumnSchema('age')->castToStringColumn();
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToFloat(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->getInitializedColumnSchema('age')->castToFloatColumn();
+        $col = $this->getInitializedColumnSchema('someCol');
+        $this->assertEquals('stub', $col->getType());
     }
 }

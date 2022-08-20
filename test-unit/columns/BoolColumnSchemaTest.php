@@ -4,6 +4,8 @@ namespace Mnemesong\TableSchemaTestUnit\columns;
 
 use Mnemesong\TableSchema\columns\BoolColumnSchema;
 use Mnemesong\TableSchema\columns\ColumnSchema;
+use Mnemesong\TableSchema\columns\StringColumnSchema;
+use Mnemesong\TableSchemaStubs\ColumnSchemaStub;
 use Mnemesong\TableSchemaTestHelpers\ColumnSchemaTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -31,54 +33,6 @@ class BoolColumnSchemaTest extends TestCase
     /**
      * @return void
      */
-    public function testTypeChecks(): void
-    {
-        $sch = $this->getInitializedColumnSchema('isActive');
-        $this->assertEquals(true, $sch->isBoolColumn());
-        $this->assertEquals(false, $sch->isIntegerColumn());
-        $this->assertEquals(false, $sch->isFloatColumn());
-        $this->assertEquals(false, $sch->isStringColumn());
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToBool(): void
-    {
-        $sch = $this->getInitializedColumnSchema('isActive')->castToBoolColumn();
-        $this->assertEquals(BoolColumnSchema::class, get_class($sch));
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToInteger(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $sch = $this->getInitializedColumnSchema('isActive')->castToIntegerColumn();
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToString(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $sch = $this->getInitializedColumnSchema('isActive')->castToStringColumn();
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToFloat(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $sch = $this->getInitializedColumnSchema('isActive')->castToFloatColumn();
-    }
-
-    /**
-     * @return void
-     */
     public function testDefault(): void
     {
         $col1 = new BoolColumnSchema('updated');
@@ -91,5 +45,34 @@ class BoolColumnSchemaTest extends TestCase
         $col3 = $col2->withoutDefaultValue();
         $this->assertEquals(null, $col3->getDefaultValue());
         $this->assertEquals(true, $col2->getDefaultValue());
+    }
+
+    /**
+     * @return void
+     */
+    public function testTryToCast(): void
+    {
+        $col = $this->getInitializedColumnSchema('column');
+        $col = BoolColumnSchema::tryToCastFrom($col);
+        $this->assertTrue(is_a($col, BoolColumnSchema::class));
+    }
+
+    /**
+     * @return void
+     */
+    public function testTryToCastException(): void
+    {
+        $col = new StringColumnSchema('name');
+        $this->expectException(\InvalidArgumentException::class);
+        $col = BoolColumnSchema::tryToCastFrom($col);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetType(): void
+    {
+        $col = $this->getInitializedColumnSchema('isActive');
+        $this->assertEquals('bool', $col->getType());
     }
 }

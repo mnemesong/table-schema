@@ -3,6 +3,7 @@
 namespace Mnemesong\TableSchemaTestUnit\columns;
 
 use Mnemesong\TableSchema\columns\ColumnSchema;
+use Mnemesong\TableSchema\columns\FloatColumnSchema;
 use Mnemesong\TableSchema\columns\IntegerColumnSchema;
 use Mnemesong\TableSchemaTestHelpers\ColumnSchemaTestTrait;
 use PHPUnit\Framework\TestCase;
@@ -26,54 +27,6 @@ class IntegerColumnSchemaTest extends TestCase
     protected function getInitializedColumnSchema(string $name): ColumnSchema
     {
         return new IntegerColumnSchema($name);
-    }
-
-    /**
-     * @return void
-     */
-    public function testTypeChecks(): void
-    {
-        $col = $this->getInitializedColumnSchema('age');
-        $this->assertEquals(false, $col->isBoolColumn());
-        $this->assertEquals(false, $col->isStringColumn());
-        $this->assertEquals(true, $col->isIntegerColumn());
-        $this->assertEquals(false, $col->isFloatColumn());
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToBool(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $sch = $this->getInitializedColumnSchema('age')->castToBoolColumn();
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToInteger(): void
-    {
-        $sch = $this->getInitializedColumnSchema('age')->castToIntegerColumn();
-        $this->assertEquals(IntegerColumnSchema::class, get_class($sch));
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToString(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $sch = $this->getInitializedColumnSchema('age')->castToBoolColumn();
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToFloat(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $sch = $this->getInitializedColumnSchema('age')->castToBoolColumn();
     }
 
     /**
@@ -152,5 +105,34 @@ class IntegerColumnSchemaTest extends TestCase
         $col = $col->withDefaultValue(11);
         $this->expectException(\InvalidArgumentException::class);
         $col = $col->withValueLimits(1, 10);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTryToCast(): void
+    {
+        $col = $this->getInitializedColumnSchema('employeesNum');
+        $col = IntegerColumnSchema::tryToCastFrom($col);
+        $this->assertTrue(is_a($col, IntegerColumnSchema::class));
+    }
+
+    /**
+     * @return void
+     */
+    public function testTryToCastException(): void
+    {
+        $col = new FloatColumnSchema('distance');
+        $this->expectException(\InvalidArgumentException::class);
+        $col = IntegerColumnSchema::tryToCastFrom($col);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetType(): void
+    {
+        $col = $this->getInitializedColumnSchema('count');
+        $this->assertEquals('int', $col->getType());
     }
 }

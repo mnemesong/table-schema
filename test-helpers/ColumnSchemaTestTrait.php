@@ -21,27 +21,17 @@ trait ColumnSchemaTestTrait
     /**
      * @return void
      */
-    abstract public function testTypeChecks(): void;
+    abstract public function testTryToCast(): void;
 
     /**
      * @return void
      */
-    abstract public function testCastToBool(): void;
+    abstract public function testTryToCastException(): void;
 
     /**
      * @return void
      */
-    abstract public function testCastToInteger(): void;
-
-    /**
-     * @return void
-     */
-    abstract public function testCastToString(): void;
-
-    /**
-     * @return void
-     */
-    abstract public function testCastToFloat(): void;
+    abstract public function testGetType(): void;
 
     /**
      * @return void

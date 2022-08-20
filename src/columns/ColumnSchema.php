@@ -140,62 +140,14 @@ abstract class ColumnSchema
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    abstract public function isIntegerColumn(): bool;
+    abstract public function getType(): string;
 
     /**
-     * @return bool
+     * @param ColumnSchema $schema
+     * @return static
      */
-    abstract public function isStringColumn(): bool;
+    abstract static public function tryToCastFrom(ColumnSchema $schema): ColumnSchema;
 
-    /**
-     * @return bool
-     */
-    abstract public function isBoolColumn(): bool;
-
-    /**
-     * @return bool
-     */
-    abstract public function isFloatColumn(): bool;
-
-    /**
-     * @return IntegerColumnSchema
-     */
-    public function castToIntegerColumn(): IntegerColumnSchema
-    {
-        Assert::isAOf($this, IntegerColumnSchema::class, 'Try to cast not integer column schema as integer');
-        /* @var IntegerColumnSchema $this */
-        return $this;
-    }
-
-    /**
-     * @return FloatColumnSchema
-     */
-    public function castToFloatColumn(): FloatColumnSchema
-    {
-        Assert::isAOf($this, FloatColumnSchema::class, 'Try to cast not float column schema as float');
-        /* @var FloatColumnSchema $this */
-        return $this;
-    }
-
-    /**
-     * @return StringColumnSchema
-     */
-    public function castToStringColumn(): StringColumnSchema
-    {
-        Assert::isAOf($this, StringColumnSchema::class, 'Try to cast not string column schema as string');
-        /* @var StringColumnSchema $this */
-        return $this;
-    }
-
-    /**
-     * @return BoolColumnSchema
-     */
-    public function castToBoolColumn(): BoolColumnSchema
-    {
-        Assert::isAOf($this, BoolColumnSchema::class, 'Try to cast not bool column schema as bool');
-        /* @var BoolColumnSchema $this */
-        return $this;
-    }
 }

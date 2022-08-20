@@ -5,6 +5,7 @@ namespace Mnemesong\TableSchemaTestUnit\columns;
 use Mnemesong\TableSchema\columns\BoolColumnSchema;
 use Mnemesong\TableSchema\columns\ColumnSchema;
 use Mnemesong\TableSchema\columns\FloatColumnSchema;
+use Mnemesong\TableSchema\columns\IntegerColumnSchema;
 use Mnemesong\TableSchemaTestHelpers\ColumnSchemaTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -27,54 +28,6 @@ class FloatColumnSchemaTest extends TestCase
     protected function getInitializedColumnSchema(string $name): ColumnSchema
     {
         return new FloatColumnSchema($name);
-    }
-
-    /**
-     * @return void
-     */
-    public function testTypeChecks(): void
-    {
-        $col = $this->getInitializedColumnSchema('xCord');
-        $this->assertEquals(false, $col->isBoolColumn());
-        $this->assertEquals(false, $col->isIntegerColumn());
-        $this->assertEquals(false, $col->isStringColumn());
-        $this->assertEquals(true, $col->isFloatColumn());
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToBool(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $sch = $this->getInitializedColumnSchema('avg')->castToBoolColumn();
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToInteger(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $sch = $this->getInitializedColumnSchema('avg')->castToIntegerColumn();
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToString(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $sch = $this->getInitializedColumnSchema('avg')->castToStringColumn();
-    }
-
-    /**
-     * @return void
-     */
-    public function testCastToFloat(): void
-    {
-        $sch = $this->getInitializedColumnSchema('avg')->castToFloatColumn();
-        $this->assertEquals(FloatColumnSchema::class, get_class($sch));
     }
 
     /**
@@ -166,5 +119,34 @@ class FloatColumnSchemaTest extends TestCase
         $col = $col->withDefaultValue(10.3);
         $this->expectException(\InvalidArgumentException::class);
         $col = $col->withValueLimits(1, 10);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTryToCast(): void
+    {
+        $col = $this->getInitializedColumnSchema('distance');
+        $col = FloatColumnSchema::tryToCastFrom($col);
+        $this->assertTrue(is_a($col, FloatColumnSchema::class));
+    }
+
+    /**
+     * @return void
+     */
+    public function testTryToCastException(): void
+    {
+        $col = new IntegerColumnSchema('age');
+        $this->expectException(\InvalidArgumentException::class);
+        $col = FloatColumnSchema::tryToCastFrom($col);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetType(): void
+    {
+        $col = $this->getInitializedColumnSchema('distance');
+        $this->assertEquals('float', $col->getType());
     }
 }

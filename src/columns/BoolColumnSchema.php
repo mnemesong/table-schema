@@ -2,7 +2,9 @@
 
 namespace Mnemesong\TableSchema\columns;
 
-class BoolColumnSchema extends ColumnSchema
+use Webmozart\Assert\Assert;
+
+final class BoolColumnSchema extends ColumnSchema
 {
     protected ?bool $default = null;
 
@@ -36,34 +38,21 @@ class BoolColumnSchema extends ColumnSchema
     }
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isIntegerColumn(): bool
+    public function getType(): string
     {
-        return false;
+        return 'bool';
     }
 
     /**
-     * @return bool
+     * @param ColumnSchema $schema
+     * @return BoolColumnSchema
      */
-    public function isStringColumn(): bool
+    static public function tryToCastFrom(ColumnSchema $schema): BoolColumnSchema
     {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBoolColumn(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFloatColumn(): bool
-    {
-        return false;
+        Assert::isAOf($schema, BoolColumnSchema::class);
+        /* @var BoolColumnSchema $schema */
+        return $schema;
     }
 }

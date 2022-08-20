@@ -3,38 +3,26 @@
 namespace Mnemesong\TableSchemaStubs;
 
 use Mnemesong\TableSchema\columns\ColumnSchema;
+use Webmozart\Assert\Assert;
 
-class ColumnSchemaStub extends ColumnSchema
+final class ColumnSchemaStub extends ColumnSchema
 {
     /**
-     * @return bool
+     * @return string
      */
-    public function isIntegerColumn(): bool
+    public function getType(): string
     {
-        return false;
+        return 'stub';
     }
 
     /**
-     * @return bool
+     * @param ColumnSchema $schema
+     * @return ColumnSchemaStub
      */
-    public function isStringColumn(): bool
+    static public function tryToCastFrom(ColumnSchema $schema): ColumnSchemaStub
     {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBoolColumn(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFloatColumn(): bool
-    {
-        return false;
+        Assert::isAOf($schema, ColumnSchemaStub::class);
+        /* @var ColumnSchemaStub $schema */
+        return $schema;
     }
 }
