@@ -1,5 +1,11 @@
 <h1>mnemesong/table-schema</h1>
 
+[![Latest Stable Version](http://poser.pugx.org/mnemesong/table-schema/v)](https://packagist.org/packages/mnemesong/table-schema)
+[![PHPUnit](https://github.com/mnemesong/table-schema/actions/workflows/phpunit.yml/badge.svg)](https://github.com/mnemesong/table-schema/actions/workflows/phpunit.yml)
+[![PHPStan-lvl9](https://github.com/mnemesong/table-schema/actions/workflows/phpstan.yml/badge.svg)](https://github.com/mnemesong/table-schema/actions/workflows/phpstan.yml)
+[![PHP Version Require](http://poser.pugx.org/mnemesong/table-schema/require/php)](https://packagist.org/packages/mnemesong/table-schema)
+[![License](http://poser.pugx.org/mnemesong/table-schema/license)](https://packagist.org/packages/mnemesong/table-schema)
+
 - The documentation is written in two languages: Russian and English.
 - Документация написана на двух языках: русском и английском.
 
