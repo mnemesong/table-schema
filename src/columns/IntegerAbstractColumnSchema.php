@@ -4,7 +4,7 @@ namespace Mnemesong\TableSchema\columns;
 
 use Webmozart\Assert\Assert;
 
-final class IntegerColumnSchema extends ColumnSchema
+final class IntegerAbstractColumnSchema extends AbstractColumnSchema
 {
     protected ?int $maxValue = null;
     protected ?int $minValue = null;
@@ -112,13 +112,13 @@ final class IntegerColumnSchema extends ColumnSchema
     }
 
     /**
-     * @param ColumnSchema $schema
-     * @return IntegerColumnSchema
+     * @param AbstractColumnSchema $schema
+     * @return IntegerAbstractColumnSchema
      */
-    static public function tryToCastFrom(ColumnSchema $schema): IntegerColumnSchema
+    static public function tryToCastFrom(AbstractColumnSchema $schema): IntegerAbstractColumnSchema
     {
-        Assert::isAOf($schema, IntegerColumnSchema::class);
-        /* @var IntegerColumnSchema $schema */
+        Assert::isAOf($schema, IntegerAbstractColumnSchema::class);
+        /* @var IntegerAbstractColumnSchema $schema */
         return $schema;
     }
 }

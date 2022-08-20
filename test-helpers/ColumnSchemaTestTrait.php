@@ -2,7 +2,7 @@
 
 namespace Mnemesong\TableSchemaTestHelpers;
 
-use Mnemesong\TableSchema\columns\ColumnSchema;
+use Mnemesong\TableSchema\columns\AbstractColumnSchema;
 use PHPUnit\Framework\TestCase;
 
 trait ColumnSchemaTestTrait
@@ -14,9 +14,9 @@ trait ColumnSchemaTestTrait
 
     /**
      * @param string $name
-     * @return ColumnSchema
+     * @return AbstractColumnSchema
      */
-    abstract protected function getInitializedColumnSchema(string $name): ColumnSchema;
+    abstract protected function getInitializedColumnSchema(string $name): AbstractColumnSchema;
 
     /**
      * @return void

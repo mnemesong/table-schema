@@ -2,13 +2,14 @@
 
 namespace Mnemesong\TableSchemaTestUnit\helpers;
 
-use Mnemesong\TableSchema\columns\BoolColumnSchema;
-use Mnemesong\TableSchema\columns\ColumnSchema;
-use Mnemesong\TableSchema\columns\FloatColumnSchema;
-use Mnemesong\TableSchema\columns\IntegerColumnSchema;
-use Mnemesong\TableSchema\columns\StringColumnSchema;
+use Mnemesong\TableSchema\columns\BoolAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\AbstractColumnSchema;
+use Mnemesong\TableSchema\columns\FloatAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\IntegerAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\StringAbstractColumnSchema;
 use Mnemesong\TableSchema\helpers\ColumnsHelper;
 use PHPUnit\Framework\TestCase;
+use Webmozart\Assert\Assert;
 
 class ColumnsHelperTest extends TestCase
 {
@@ -18,10 +19,10 @@ class ColumnsHelperTest extends TestCase
     public function testAdequacy(): void
     {
         $this->assertEmpty(array_diff(ColumnsHelper::typesAssociation(), [
-            BoolColumnSchema::class,
-            FloatColumnSchema::class,
-            IntegerColumnSchema::class,
-            StringColumnSchema::class,
+            BoolAbstractColumnSchema::class,
+            FloatAbstractColumnSchema::class,
+            IntegerAbstractColumnSchema::class,
+            StringAbstractColumnSchema::class,
         ]));
     }
 
@@ -33,7 +34,8 @@ class ColumnsHelperTest extends TestCase
         foreach (ColumnsHelper::typesAssociation() as $type => $class)
         {
             $col = new $class('someName');
-            /* @var ColumnSchema $col */
+            Assert::isAOf($col, AbstractColumnSchema::class);
+            /* @var AbstractColumnSchema $col */
             $this->assertEquals($col->getType(), $type);
         }
     }

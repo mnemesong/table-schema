@@ -4,7 +4,7 @@ namespace Mnemesong\TableSchema\columns;
 
 use Webmozart\Assert\Assert;
 
-abstract class ColumnSchema
+abstract class AbstractColumnSchema
 {
 
     protected string $columnName;
@@ -145,9 +145,9 @@ abstract class ColumnSchema
     abstract public function getType(): string;
 
     /**
-     * @param ColumnSchema $schema
+     * @param AbstractColumnSchema $schema
      * @return static
      */
-    abstract static public function tryToCastFrom(ColumnSchema $schema): ColumnSchema;
+    abstract static public function tryToCastFrom(AbstractColumnSchema $schema): AbstractColumnSchema;
 
 }

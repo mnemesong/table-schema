@@ -2,9 +2,9 @@
 
 namespace Mnemesong\TableSchemaTestUnit\stubs;
 
-use Mnemesong\TableSchema\columns\BoolColumnSchema;
-use Mnemesong\TableSchema\columns\ColumnSchema;
-use Mnemesong\TableSchemaStubs\ColumnSchemaStub;
+use Mnemesong\TableSchema\columns\BoolAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\AbstractColumnSchema;
+use Mnemesong\TableSchemaStubs\AbstractColumnSchemaStub;
 use Mnemesong\TableSchemaTestHelpers\ColumnSchemaTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -22,11 +22,11 @@ class ColumnsSchemaTest extends TestCase
 
     /**
      * @param string $name
-     * @return ColumnSchema
+     * @return AbstractColumnSchema
      */
-    protected function getInitializedColumnSchema(string $name): ColumnSchema
+    protected function getInitializedColumnSchema(string $name): AbstractColumnSchema
     {
-        return new ColumnSchemaStub($name);
+        return new AbstractColumnSchemaStub($name);
     }
 
     /**
@@ -35,8 +35,8 @@ class ColumnsSchemaTest extends TestCase
     public function testTryToCast(): void
     {
         $col = $this->getInitializedColumnSchema('someCol');
-        $col = ColumnSchemaStub::tryToCastFrom($col);
-        $this->assertEquals(ColumnSchemaStub::class, get_class($col));
+        $col = AbstractColumnSchemaStub::tryToCastFrom($col);
+        $this->assertEquals(AbstractColumnSchemaStub::class, get_class($col));
     }
 
     /**
@@ -44,9 +44,9 @@ class ColumnsSchemaTest extends TestCase
      */
     public function testTryToCastException(): void
     {
-        $col = new BoolColumnSchema('active');
+        $col = new BoolAbstractColumnSchema('active');
         $this->expectException(\InvalidArgumentException::class);
-        $col = ColumnSchemaStub::tryToCastFrom($col);
+        $col = AbstractColumnSchemaStub::tryToCastFrom($col);
     }
 
     /**

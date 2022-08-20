@@ -2,9 +2,9 @@
 
 namespace Mnemesong\TableSchemaTestUnit\columns;
 
-use Mnemesong\TableSchema\columns\ColumnSchema;
-use Mnemesong\TableSchema\columns\IntegerColumnSchema;
-use Mnemesong\TableSchema\columns\StringColumnSchema;
+use Mnemesong\TableSchema\columns\AbstractColumnSchema;
+use Mnemesong\TableSchema\columns\IntegerAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\StringAbstractColumnSchema;
 use Mnemesong\TableSchemaTestHelpers\ColumnSchemaTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -22,11 +22,11 @@ class StringColumnSchemaTest extends TestCase
 
     /**
      * @param string $name
-     * @return ColumnSchema
+     * @return AbstractColumnSchema
      */
-    protected function getInitializedColumnSchema(string $name): ColumnSchema
+    protected function getInitializedColumnSchema(string $name): AbstractColumnSchema
     {
-        return new StringColumnSchema($name);
+        return new StringAbstractColumnSchema($name);
     }
 
     /**
@@ -34,7 +34,7 @@ class StringColumnSchemaTest extends TestCase
      */
     public function testLengthLimit(): void
     {
-        $col1 = new StringColumnSchema('date');
+        $col1 = new StringAbstractColumnSchema('date');
         $this->assertEquals(null, $col1->getStringLengthLimit());
 
         $col2 = $col1->withStringLengthLimit(20);
@@ -52,7 +52,7 @@ class StringColumnSchemaTest extends TestCase
     public function testLengthLimitException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        (new StringColumnSchema('date'))->withStringLengthLimit(-1);
+        (new StringAbstractColumnSchema('date'))->withStringLengthLimit(-1);
     }
 
     /**
@@ -60,7 +60,7 @@ class StringColumnSchemaTest extends TestCase
      */
     public function testDefaultValue(): void
     {
-        $col1 = new StringColumnSchema('name');
+        $col1 = new StringAbstractColumnSchema('name');
         $this->assertEquals(null, $col1->getDefaultValue());
 
         $col2 = $col1->withDefaultValue('');
@@ -82,8 +82,8 @@ class StringColumnSchemaTest extends TestCase
     public function testTryToCast(): void
     {
         $col = $this->getInitializedColumnSchema('name');
-        $col = StringColumnSchema::tryToCastFrom($col);
-        $this->assertTrue(is_a($col, StringColumnSchema::class));
+        $col = StringAbstractColumnSchema::tryToCastFrom($col);
+        $this->assertTrue(is_a($col, StringAbstractColumnSchema::class));
     }
 
     /**
@@ -91,9 +91,9 @@ class StringColumnSchemaTest extends TestCase
      */
     public function testTryToCastException(): void
     {
-        $col = new IntegerColumnSchema('score');
+        $col = new IntegerAbstractColumnSchema('score');
         $this->expectException(\InvalidArgumentException::class);
-        $col = StringColumnSchema::tryToCastFrom($col);
+        $col = StringAbstractColumnSchema::tryToCastFrom($col);
     }
 
     /**

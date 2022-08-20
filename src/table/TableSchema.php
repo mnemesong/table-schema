@@ -2,7 +2,7 @@
 
 namespace Mnemesong\TableSchema\table;
 
-use Mnemesong\TableSchema\columns\ColumnSchema;
+use Mnemesong\TableSchema\columns\AbstractColumnSchema;
 use Webmozart\Assert\Assert;
 
 class TableSchema
@@ -50,13 +50,13 @@ class TableSchema
     }
 
     /**
-     * @param ColumnSchema $columnSchema
+     * @param AbstractColumnSchema $columnSchema
      * @return $this
      */
-    public function withColumn(ColumnSchema $columnSchema): self
+    public function withColumn(AbstractColumnSchema $columnSchema): self
     {
         $clone = clone $this;
-        $clone->columns = array_filter($clone->columns, fn(ColumnSchema $c)
+        $clone->columns = array_filter($clone->columns, fn(AbstractColumnSchema $c)
             => ($c->getColumnName() !== $columnSchema->getColumnName()));
         $clone->columns[] = $columnSchema;
         return $clone;
@@ -68,7 +68,7 @@ class TableSchema
      */
     public function withoutColumn(string $columnName): self
     {
-        $newColumns = array_filter($this->columns, fn(ColumnSchema $c) => ($c->getColumnName() !== $columnName));
+        $newColumns = array_filter($this->columns, fn(AbstractColumnSchema $c) => ($c->getColumnName() !== $columnName));
         $newColumns = array_values($newColumns);
         $this->assertColumnsPkValid($this->pk, $newColumns);
         $clone = clone $this;
@@ -78,11 +78,11 @@ class TableSchema
 
     /**
      * @param string $columnName
-     * @return ColumnSchema|null
+     * @return AbstractColumnSchema|null
      */
-    public function getColumn(string $columnName): ?ColumnSchema
+    public function getColumn(string $columnName): ?AbstractColumnSchema
     {
-        $col = array_filter($this->columns, fn(ColumnSchema $c) => ($c->getColumnName() === $columnName));
+        $col = array_filter($this->columns, fn(AbstractColumnSchema $c) => ($c->getColumnName() === $columnName));
         if(empty($col)) {
             return null;
         }
@@ -90,7 +90,7 @@ class TableSchema
     }
 
     /**
-     * @return ColumnSchema[]
+     * @return AbstractColumnSchema[]
      */
     public function getAllColumns(): array
     {
@@ -151,12 +151,12 @@ class TableSchema
 
     /**
      * @param string[] $pkColumns
-     * @param ColumnSchema[] $columns
+     * @param AbstractColumnSchema[] $columns
      * @return void
      */
     protected function assertColumnsPkValid(array $pkColumns, array $columns): void
     {
-        $columnNames = array_map(fn(ColumnSchema $c) => ($c->getColumnName()), $columns);
+        $columnNames = array_map(fn(AbstractColumnSchema $c) => ($c->getColumnName()), $columns);
         Assert::isEmpty(array_diff($pkColumns, $columnNames), "Try to set Primary Key to not exists value");
     }
 }

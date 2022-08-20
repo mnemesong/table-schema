@@ -2,10 +2,10 @@
 
 namespace Mnemesong\TableSchema\helpers;
 
-use Mnemesong\TableSchema\columns\BoolColumnSchema;
-use Mnemesong\TableSchema\columns\FloatColumnSchema;
-use Mnemesong\TableSchema\columns\IntegerColumnSchema;
-use Mnemesong\TableSchema\columns\StringColumnSchema;
+use Mnemesong\TableSchema\columns\BoolAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\FloatAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\IntegerAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\StringAbstractColumnSchema;
 
 class ColumnsHelper
 {
@@ -15,10 +15,10 @@ class ColumnsHelper
     public static function typesAssociation(): array
     {
         return [
-            'bool' => BoolColumnSchema::class,
-            'float' => FloatColumnSchema::class,
-            'int' => IntegerColumnSchema::class,
-            'string' => StringColumnSchema::class,
+            'bool' => BoolAbstractColumnSchema::class,
+            'float' => FloatAbstractColumnSchema::class,
+            'int' => IntegerAbstractColumnSchema::class,
+            'string' => StringAbstractColumnSchema::class,
         ];
     }
 

@@ -2,10 +2,10 @@
 
 namespace Mnemesong\TableSchemaTestUnit\columns;
 
-use Mnemesong\TableSchema\columns\BoolColumnSchema;
-use Mnemesong\TableSchema\columns\ColumnSchema;
-use Mnemesong\TableSchema\columns\FloatColumnSchema;
-use Mnemesong\TableSchema\columns\IntegerColumnSchema;
+use Mnemesong\TableSchema\columns\BoolAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\AbstractColumnSchema;
+use Mnemesong\TableSchema\columns\FloatAbstractColumnSchema;
+use Mnemesong\TableSchema\columns\IntegerAbstractColumnSchema;
 use Mnemesong\TableSchemaTestHelpers\ColumnSchemaTestTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -23,11 +23,11 @@ class FloatColumnSchemaTest extends TestCase
 
     /**
      * @param string $name
-     * @return ColumnSchema
+     * @return AbstractColumnSchema
      */
-    protected function getInitializedColumnSchema(string $name): ColumnSchema
+    protected function getInitializedColumnSchema(string $name): AbstractColumnSchema
     {
-        return new FloatColumnSchema($name);
+        return new FloatAbstractColumnSchema($name);
     }
 
     /**
@@ -35,7 +35,7 @@ class FloatColumnSchemaTest extends TestCase
      */
     public function testLimits(): void
     {
-        $col1 = new FloatColumnSchema('maxVal');
+        $col1 = new FloatAbstractColumnSchema('maxVal');
         $this->assertEquals(null, $col1->getMaxValue());
         $this->assertEquals(null, $col1->getMinValue());
 
@@ -63,7 +63,7 @@ class FloatColumnSchemaTest extends TestCase
      */
     public function testAccuracy(): void
     {
-        $col1 = new FloatColumnSchema('maxVal');
+        $col1 = new FloatAbstractColumnSchema('maxVal');
         $this->assertEquals(0.0001, $col1->getAccuracy());
 
         $col2 = $col1->withAccuracy(0.02);
@@ -76,7 +76,7 @@ class FloatColumnSchemaTest extends TestCase
      */
     public function testDefault(): void
     {
-        $col1 = new FloatColumnSchema('maxVal');
+        $col1 = new FloatAbstractColumnSchema('maxVal');
         $this->assertEquals(null, $col1->getDefaultValue());
 
         $col2 = $col1->withDefaultValue(0.11);
@@ -93,7 +93,7 @@ class FloatColumnSchemaTest extends TestCase
      */
     public function testDefaultException1(): void
     {
-        $col = new FloatColumnSchema('metric');
+        $col = new FloatAbstractColumnSchema('metric');
         $col = $col->withValueLimits(1, 10);
         $this->expectException(\InvalidArgumentException::class);
         $col = $col->withDefaultValue(0.5);
@@ -104,7 +104,7 @@ class FloatColumnSchemaTest extends TestCase
      */
     public function testDefaultException2(): void
     {
-        $col = new FloatColumnSchema('metric');
+        $col = new FloatAbstractColumnSchema('metric');
         $col = $col->withValueLimits(1, 10);
         $this->expectException(\InvalidArgumentException::class);
         $col = $col->withDefaultValue(10.3);
@@ -115,7 +115,7 @@ class FloatColumnSchemaTest extends TestCase
      */
     public function testDefaultException3(): void
     {
-        $col = new FloatColumnSchema('metric');
+        $col = new FloatAbstractColumnSchema('metric');
         $col = $col->withDefaultValue(10.3);
         $this->expectException(\InvalidArgumentException::class);
         $col = $col->withValueLimits(1, 10);
@@ -127,8 +127,8 @@ class FloatColumnSchemaTest extends TestCase
     public function testTryToCast(): void
     {
         $col = $this->getInitializedColumnSchema('distance');
-        $col = FloatColumnSchema::tryToCastFrom($col);
-        $this->assertTrue(is_a($col, FloatColumnSchema::class));
+        $col = FloatAbstractColumnSchema::tryToCastFrom($col);
+        $this->assertTrue(is_a($col, FloatAbstractColumnSchema::class));
     }
 
     /**
@@ -136,9 +136,9 @@ class FloatColumnSchemaTest extends TestCase
      */
     public function testTryToCastException(): void
     {
-        $col = new IntegerColumnSchema('age');
+        $col = new IntegerAbstractColumnSchema('age');
         $this->expectException(\InvalidArgumentException::class);
-        $col = FloatColumnSchema::tryToCastFrom($col);
+        $col = FloatAbstractColumnSchema::tryToCastFrom($col);
     }
 
     /**
