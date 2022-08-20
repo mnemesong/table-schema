@@ -115,7 +115,7 @@ final class IntegerColumnSchema extends ColumnSchema
      * @param ColumnSchema $schema
      * @return IntegerColumnSchema
      */
-    static public function tryToCastFrom(ColumnSchema $schema): IntegerColumnSchema
+    static public function assertClass(ColumnSchema $schema): IntegerColumnSchema
     {
         Assert::isAOf($schema, IntegerColumnSchema::class);
         /* @var IntegerColumnSchema $schema */

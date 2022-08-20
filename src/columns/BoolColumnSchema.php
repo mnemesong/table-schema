@@ -49,7 +49,7 @@ final class BoolColumnSchema extends ColumnSchema
      * @param ColumnSchema $schema
      * @return BoolColumnSchema
      */
-    static public function tryToCastFrom(ColumnSchema $schema): BoolColumnSchema
+    static public function assertClass(ColumnSchema $schema): BoolColumnSchema
     {
         Assert::isAOf($schema, BoolColumnSchema::class);
         /* @var BoolColumnSchema $schema */

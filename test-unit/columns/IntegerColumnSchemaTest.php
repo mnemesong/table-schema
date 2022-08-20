@@ -113,7 +113,7 @@ class IntegerColumnSchemaTest extends TestCase
     public function testTryToCast(): void
     {
         $col = $this->getInitializedColumnSchema('employeesNum');
-        $col = IntegerColumnSchema::tryToCastFrom($col);
+        $col = IntegerColumnSchema::assertClass($col);
         $this->assertTrue(is_a($col, IntegerColumnSchema::class));
     }
 
@@ -124,7 +124,7 @@ class IntegerColumnSchemaTest extends TestCase
     {
         $col = new FloatColumnSchema('distance');
         $this->expectException(\InvalidArgumentException::class);
-        $col = IntegerColumnSchema::tryToCastFrom($col);
+        $col = IntegerColumnSchema::assertClass($col);
     }
 
     /**

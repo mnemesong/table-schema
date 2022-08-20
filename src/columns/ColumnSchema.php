@@ -148,6 +148,6 @@ abstract class ColumnSchema
      * @param ColumnSchema $schema
      * @return static
      */
-    abstract static public function tryToCastFrom(ColumnSchema $schema): ColumnSchema;
+    abstract static public function assertClass(ColumnSchema $schema): ColumnSchema;
 
 }

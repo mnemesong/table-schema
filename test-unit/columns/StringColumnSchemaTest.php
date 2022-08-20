@@ -82,7 +82,7 @@ class StringColumnSchemaTest extends TestCase
     public function testTryToCast(): void
     {
         $col = $this->getInitializedColumnSchema('name');
-        $col = StringColumnSchema::tryToCastFrom($col);
+        $col = StringColumnSchema::assertClass($col);
         $this->assertTrue(is_a($col, StringColumnSchema::class));
     }
 
@@ -93,7 +93,7 @@ class StringColumnSchemaTest extends TestCase
     {
         $col = new IntegerColumnSchema('score');
         $this->expectException(\InvalidArgumentException::class);
-        $col = StringColumnSchema::tryToCastFrom($col);
+        $col = StringColumnSchema::assertClass($col);
     }
 
     /**

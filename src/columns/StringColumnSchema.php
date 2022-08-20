@@ -97,7 +97,7 @@ final class StringColumnSchema extends ColumnSchema
      * @param ColumnSchema $schema
      * @return StringColumnSchema
      */
-    static public function tryToCastFrom(ColumnSchema $schema): StringColumnSchema
+    static public function assertClass(ColumnSchema $schema): StringColumnSchema
     {
         Assert::isAOf($schema, StringColumnSchema::class);
         /* @var StringColumnSchema $schema */

@@ -53,7 +53,7 @@ class BoolColumnSchemaTest extends TestCase
     public function testTryToCast(): void
     {
         $col = $this->getInitializedColumnSchema('column');
-        $col = BoolColumnSchema::tryToCastFrom($col);
+        $col = BoolColumnSchema::assertClass($col);
         $this->assertTrue(is_a($col, BoolColumnSchema::class));
     }
 
@@ -64,7 +64,7 @@ class BoolColumnSchemaTest extends TestCase
     {
         $col = new StringColumnSchema('name');
         $this->expectException(\InvalidArgumentException::class);
-        $col = BoolColumnSchema::tryToCastFrom($col);
+        $col = BoolColumnSchema::assertClass($col);
     }
 
     /**

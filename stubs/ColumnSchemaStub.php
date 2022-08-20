@@ -19,7 +19,7 @@ final class ColumnSchemaStub extends ColumnSchema
      * @param ColumnSchema $schema
      * @return ColumnSchemaStub
      */
-    static public function tryToCastFrom(ColumnSchema $schema): ColumnSchemaStub
+    static public function assertClass(ColumnSchema $schema): ColumnSchemaStub
     {
         Assert::isAOf($schema, ColumnSchemaStub::class);
         /* @var ColumnSchemaStub $schema */

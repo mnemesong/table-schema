@@ -136,7 +136,7 @@ final class FloatColumnSchema extends ColumnSchema
      * @param ColumnSchema $schema
      * @return FloatColumnSchema
      */
-    static public function tryToCastFrom(ColumnSchema $schema): FloatColumnSchema
+    static public function assertClass(ColumnSchema $schema): FloatColumnSchema
     {
         Assert::isAOf($schema, FloatColumnSchema::class);
         /* @var FloatColumnSchema $schema */
