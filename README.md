@@ -14,11 +14,17 @@
 <h2>General description / Общее описание</h2>
 <h3>ENG:</h3>
 <p>The package provides objects and mechanics for creating abstract table schemas and tabular columns without binding
-to a specific type of database.</p>
+to a particular type of database. Table and column objects contain only the necessary data structure to describe a column on any
+database. Features that are not typical for all types of storage are implemented using the mechanics of specifications:
+A specification is a pair: an identifier and an attached value. Initially, a ppackage does not contain any specifications.
+Specifications and the mechanics of their processing should be implemented based on specific storage types.</p>
 
 <h3>RUS:</h3>
 <p>Пакет предосталвяет объекты и механики для создания абстрактных схем таблиц и табличных колонок без привязки
-к конкретному виду БД.</p>
+к конкретному виду БД. Объекты таблиц и колонок содержат только необходимую структуру данных, для описания колонки на любой
+базе данных. Возможности характерные не для всех типов хранилищ реализованы с помощью механики спецификаций: 
+Спецификация это пара: идентификатор и прилагающееся значение. Изначально ппакет не содержит никаких спецификаций.
+Спецификации и механика их обработки должны быть реализованы на базе конкретных типов хранилищ.</p>
 <hr>
 
 <h2>Requirements / Требования</h2>
