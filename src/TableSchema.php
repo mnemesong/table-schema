@@ -103,6 +103,7 @@ class TableSchema
     }
 
     /**
+     * @param ColumnSchema[] $columns
      * @return $this
      */
     public function withColumnsReset(array $columns): self

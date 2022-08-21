@@ -41,7 +41,7 @@ class ColumnSchema
     }
 
     /**
-     * @param array $settings
+     * @param ColumnSettingInterface[] $settings
      * @return $this
      */
     public function withSettingsReset(array $settings): self
