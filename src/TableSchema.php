@@ -1,8 +1,7 @@
 <?php
 
-namespace Mnemesong\TableSchema\table;
+namespace Mnemesong\TableSchema;
 
-use Mnemesong\TableSchema\columns\ColumnSchema;
 use Webmozart\Assert\Assert;
 
 class TableSchema
@@ -56,8 +55,14 @@ class TableSchema
     public function withColumn(ColumnSchema $columnSchema): self
     {
         $clone = clone $this;
-        $clone->columns = array_filter($clone->columns, fn(ColumnSchema $c)
-            => ($c->getColumnName() !== $columnSchema->getColumnName()));
+        foreach ($clone->columns as &$c)
+        {
+            /* @var ColumnSchema $c */
+            if($columnSchema->getColumnName() === $c->getColumnName()) {
+                $c = $columnSchema;
+                return $clone;
+            }
+        }
         $clone->columns[] = $columnSchema;
         return $clone;
     }
@@ -86,7 +91,7 @@ class TableSchema
         if(empty($col)) {
             return null;
         }
-        return $col[array_key_first($col)];
+        return $col[\array_key_first($col)];
     }
 
     /**
@@ -100,11 +105,12 @@ class TableSchema
     /**
      * @return $this
      */
-    public function withClearColumns(): self
+    public function withColumnsReset(array $columns): self
     {
-        $this->assertColumnsPkValid($this->pk, []);
+        Assert::allIsAOf($columns, ColumnSchema::class);
+        $this->assertColumnsPkValid($this->pk, $columns);
         $clone = clone $this;
-        $clone->columns = [];
+        $clone->columns = $columns;
         return $clone;
     }
 

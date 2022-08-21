@@ -1,11 +1,12 @@
 <?php
 
-namespace Mnemesong\TableSchemaTestUnit\table;
+namespace Mnemesong\TableSchemaTestUnit;
 
-use Mnemesong\TableSchema\columns\BoolColumnSchema;
-use Mnemesong\TableSchema\columns\IntegerColumnSchema;
-use Mnemesong\TableSchema\columns\StringColumnSchema;
-use Mnemesong\TableSchema\table\TableSchema;
+use Mnemesong\TableSchema\ColumnSchema;
+use Mnemesong\TableSchema\TableSchema;
+use Mnemesong\TableSchemaStubs\CsDateTimeStub;
+use Mnemesong\TableSchemaStubs\CsSqlNotNullStub;
+use Mnemesong\TableSchemaStubs\CsSqlNullStub;
 use PHPUnit\Framework\TestCase;
 
 class TableSchemaTest extends TestCase
@@ -49,45 +50,48 @@ class TableSchemaTest extends TestCase
         $t1 = new TableSchema('users');
         $this->assertEquals([], $t1->getAllColumns());
 
-        $t2 = $t1->withColumn(new BoolColumnSchema('active'));
+        $t2 = $t1->withColumn(new ColumnSchema('active'));
         $this->assertEquals([], $t1->getAllColumns());
-        $this->assertEquals([new BoolColumnSchema('active')], $t2->getAllColumns());
+        $this->assertEquals([new ColumnSchema('active')], $t2->getAllColumns());
 
-        $t3 = $t2->withColumn((new IntegerColumnSchema('age'))->withNullDisabled());
+        $t3 = $t2->withColumn((new ColumnSchema('age'))->withSetting(new CsSqlNotNullStub()));
         $this->assertEquals(
-            [new BoolColumnSchema('active'), (new IntegerColumnSchema('age'))->withNullDisabled()],
+            [new ColumnSchema('active'), (new ColumnSchema('age'))->withSetting(new CsSqlNotNullStub())],
             $t3->getAllColumns()
         );
-        $this->assertEquals([new BoolColumnSchema('active')], $t2->getAllColumns());
+        $this->assertEquals([new ColumnSchema('active')], $t2->getAllColumns());
 
         $t4 = $t3->withoutColumn('active');
         $this->assertEquals(
-            [new BoolColumnSchema('active'), (new IntegerColumnSchema('age'))->withNullDisabled()],
+            [new ColumnSchema('active'), (new ColumnSchema('age'))->withSetting(new CsSqlNotNullStub())],
             $t3->getAllColumns()
         );
         $this->assertEquals(
-            [(new IntegerColumnSchema('age'))->withNullDisabled()],
+            [(new ColumnSchema('age'))->withSetting(new CsSqlNotNullStub())],
             $t4->getAllColumns()
         );
 
-        $this->assertEquals(new BoolColumnSchema('active'), $t3->getColumn('active'));
+        $this->assertEquals(new ColumnSchema('active'), $t3->getColumn('active'));
 
-        $t5 = $t3->withClearColumns();
+        $t5 = $t3->withColumnsReset([new ColumnSchema('date')]);
         $this->assertEquals(
-            [new BoolColumnSchema('active'), (new IntegerColumnSchema('age'))->withNullDisabled()],
+            [new ColumnSchema('active'), (new ColumnSchema('age'))->withSetting(new CsSqlNotNullStub())],
             $t3->getAllColumns()
         );
-        $this->assertEquals([], $t5->getAllColumns());
+        $this->assertEquals([new ColumnSchema('date')], $t5->getAllColumns());
 
-        $t6 = $t3->withColumn((new IntegerColumnSchema('age'))->withAddSpec('mysql:json')->withValueLimits(0, 256));
+        $t6 = $t3->withColumn((new ColumnSchema('active'))->withSetting(new CsDateTimeStub()));
         $this->assertEquals(
-            [new BoolColumnSchema('active'), (new IntegerColumnSchema('age'))->withNullDisabled()],
+            [new ColumnSchema('active'), (new ColumnSchema('age'))->withSetting(new CsSqlNotNullStub())],
             $t3->getAllColumns()
         );
-        $this->assertEquals([
-                new BoolColumnSchema('active'),
-                (new IntegerColumnSchema('age'))->withAddSpec('mysql:json')->withValueLimits(0, 256)
-            ], $t6->getAllColumns());
+        $this->assertEquals(
+            [
+                (new ColumnSchema('active'))->withSetting(new CsDateTimeStub()),
+                (new ColumnSchema('age'))->withSetting(new CsSqlNotNullStub())
+            ],
+            $t6->getAllColumns()
+        );
     }
 
     /**
@@ -96,8 +100,8 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeys(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerColumnSchema('id'))
-            ->withColumn(new StringColumnSchema('account'));
+            ->withColumn(new ColumnSchema('id'))
+            ->withColumn(new ColumnSchema('account'));
         $this->assertEquals([], $t1->getPrimaryKey());
 
         $t2 = $t1->withPrimaryKey(['id']);
@@ -119,7 +123,7 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeyToColumnsInvalidStateException1(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerColumnSchema('id'));
+            ->withColumn(new ColumnSchema('id'));
         $this->expectException(\InvalidArgumentException::class);
         $t1 = $t1->withPrimaryKey(['account']);
     }
@@ -130,7 +134,7 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeyToColumnsInvalidStateException2(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerColumnSchema('id'));
+            ->withColumn(new ColumnSchema('id'));
         $this->expectException(\InvalidArgumentException::class);
         $t1 = $t1->withPrimaryKey(['id', 'users']);
     }
@@ -141,7 +145,7 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeyToColumnsInvalidStateException3(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerColumnSchema('id'));
+            ->withColumn(new ColumnSchema('id'));
         $t1 = $t1->withPrimaryKey(['id']);
         $this->expectException(\InvalidArgumentException::class);
         $t1 = $t1->withoutColumn('id');
@@ -153,9 +157,9 @@ class TableSchemaTest extends TestCase
     public function testPrimaryKeyToColumnsInvalidStateException4(): void
     {
         $t1 = (new TableSchema('users'))
-            ->withColumn(new IntegerColumnSchema('id'));
+            ->withColumn(new ColumnSchema('id'));
         $t1 = $t1->withPrimaryKey(['id']);
         $this->expectException(\InvalidArgumentException::class);
-        $t1 = $t1->withClearColumns();
+        $t1 = $t1->withColumnsReset([]);
     }
 }

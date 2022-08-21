@@ -2,7 +2,9 @@
 
 namespace Mnemesong\TableSchemaTestHelpers;
 
-use Mnemesong\TableSchema\columns\ColumnSchema;
+use Mnemesong\TableSchema\ColumnSchema;
+use Mnemesong\TableSchemaStubs\CsDateTimeStub;
+use Mnemesong\TableSchemaStubs\CsSqlNotNullStub;
 use PHPUnit\Framework\TestCase;
 
 trait ColumnSchemaTestTrait
@@ -17,21 +19,6 @@ trait ColumnSchemaTestTrait
      * @return ColumnSchema
      */
     abstract protected function getInitializedColumnSchema(string $name): ColumnSchema;
-
-    /**
-     * @return void
-     */
-    abstract public function testTryToCast(): void;
-
-    /**
-     * @return void
-     */
-    abstract public function testTryToCastException(): void;
-
-    /**
-     * @return void
-     */
-    abstract public function testGetType(): void;
 
     /**
      * @return void
@@ -57,56 +44,20 @@ trait ColumnSchemaTestTrait
     public function testSpecificationsLogic(): void
     {
         $col1 = $this->getInitializedColumnSchema('name');
-        $this->useTestCase()->assertEquals([], $col1->getSpecs());
+        $this->useTestCase()->assertEquals([], $col1->getAllSpecs());
 
-        $col2 = $col1->withAddSpec('mysql:json');
-        $this->useTestCase()->assertEquals([], $col1->getSpecs());
-        $this->useTestCase()->assertEquals(['mysql:json' => null], $col2->getSpecs());
+        $col2 = $col1->withSetting(new CsDateTimeStub());
+        $this->useTestCase()->assertEquals([], $col1->getAllSpecs());
+        $this->useTestCase()->assertEquals([new CsDateTimeStub()], $col2->getAllSpecs());
 
-        $col3 = $col2->withAddSpec('mysql:datetime', '+5');
-        $this->useTestCase()->assertEquals(['mysql:json' => null], $col2->getSpecs());
-        $this->useTestCase()->assertEquals(['mysql:json' => null, 'mysql:datetime' => '+5'], $col3->getSpecs());
+        $col3 = $col2->withSetting(new CsSqlNotNullStub());
+        $this->useTestCase()->assertEquals([new CsDateTimeStub()], $col2->getAllSpecs());
+        $this->useTestCase()->assertEquals([new CsDateTimeStub(), new CsSqlNotNullStub()], $col3->getAllSpecs());
 
-        $col4 = $col3->withRemovedSpec('mysql:json');
-        $this->useTestCase()->assertEquals(['mysql:json' => null, 'mysql:datetime' => '+5'], $col3->getSpecs());
-        $this->useTestCase()->assertEquals(['mysql:datetime' => '+5'], $col4->getSpecs());
-
-        $col5 = $col3->withClearSpecs();
-        $this->useTestCase()->assertEquals(['mysql:json' => null, 'mysql:datetime' => '+5'], $col3->getSpecs());
-        $this->useTestCase()->assertEquals([], $col5->getSpecs());
+        $col4 = $col3->withoutSetting((new CsDateTimeStub())->getKey());
+        $this->useTestCase()->assertEquals([new CsDateTimeStub(), new CsSqlNotNullStub()], $col3->getAllSpecs());
+        $this->useTestCase()->assertEquals([new CsSqlNotNullStub()], $col4->getAllSpecs());
     }
 
-    /**
-     * @return void
-     */
-    public function testNullableLogic(): void
-    {
-        $col1 = $this->getInitializedColumnSchema('customer');
-        $this->useTestCase()->assertEquals(true, $col1->isNullable());
 
-        $col2 = $col1->withNullDisabled();
-        $this->useTestCase()->assertEquals(true, $col1->isNullable());
-        $this->useTestCase()->assertEquals(false, $col2->isNullable());
-
-        $col3 = $col2->withNullAllowed();
-        $this->useTestCase()->assertEquals(true, $col3->isNullable());
-        $this->useTestCase()->assertEquals(false, $col2->isNullable());
-    }
-
-    /**
-     * @return void
-     */
-    public function testUniqueLogic(): void
-    {
-        $col1 = $this->getInitializedColumnSchema('name');
-        $this->useTestCase()->assertEquals(false, $col1->isUnique());
-
-        $col2 = $col1->asUnique();
-        $this->useTestCase()->assertEquals(false, $col1->isUnique());
-        $this->useTestCase()->assertEquals(true, $col2->isUnique());
-
-        $col3 = $col2->asNotUnique();
-        $this->useTestCase()->assertEquals(false, $col3->isUnique());
-        $this->useTestCase()->assertEquals(true, $col2->isUnique());
-    }
 }
