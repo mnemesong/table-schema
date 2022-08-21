@@ -84,9 +84,8 @@ class ColumnSchema
     /**
      * @return ColumnSettingInterface[]
      */
-    public function getAllSpecs(): array
+    public function getAllSettings(): array
     {
         return $this->settings;
     }
-
 }
